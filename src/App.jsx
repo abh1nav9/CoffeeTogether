@@ -36,8 +36,8 @@ function App() {
     if (parent) {
       const parentHeight = parent.clientHeight;
       const parentWidth = parent.clientWidth;
-      const randomTop = Math.floor(Math.random() * (parentHeight - 48)); // 48 is the height of the button
-      const randomLeft = Math.floor(Math.random() * (parentWidth - 112)); // 112 is the width of the button
+      const randomTop = Math.random() * (window.innerHeight - button.offsetHeight);
+      const randomLeft = Math.random() * (window.innerWidth - button.offsetWidth);
       setPosition({ top: randomTop, left: randomLeft });
       setIsMoved(true);
     }
