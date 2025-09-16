@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Button } from "../components/Button";
+import { Button } from "../components/common/Button";
 
 export function HomePage() {
   const [position, setPosition] = useState<{ top: number; left: number }>({
@@ -9,6 +9,7 @@ export function HomePage() {
   const [isMoved, setIsMoved] = useState<boolean>(false);
   const [randomLine, setRandomLine] = useState<string>("");
   const parentRef = useRef<HTMLDivElement | null>(null);
+  const noButtonRef = useRef<HTMLDivElement | null>(null);
 
   const lines: string[] = [
     "Want to test our chemistry over coffee?",
@@ -33,12 +34,22 @@ export function HomePage() {
   }, []);
 
   const moveDivToRandomPosition = () => {
-    const parent = parentRef.current;
-    if (parent) {
-      const parentHeight = parent.clientHeight;
-      const parentWidth = parent.clientWidth;
-      const randomTop = Math.floor(Math.random() * (parentHeight - 48));
-      const randomLeft = Math.floor(Math.random() * (parentWidth - 112));
+    const buttonContainer = noButtonRef.current;
+    if (buttonContainer) {
+      const buttonRect = buttonContainer.getBoundingClientRect();
+      const buttonWidth = buttonRect.width;
+      const buttonHeight = buttonRect.height;
+
+      // Limit movement to 90% of viewport
+      const limitWidth = Math.floor(window.innerWidth * 0.9);
+      const limitHeight = Math.floor(window.innerHeight * 0.9);
+
+      const maxLeft = Math.max(0, limitWidth - buttonWidth);
+      const maxTop = Math.max(0, limitHeight - buttonHeight);
+
+      const randomTop = Math.floor(Math.random() * (maxTop + 1));
+      const randomLeft = Math.floor(Math.random() * (maxLeft + 1));
+
       setPosition({ top: randomTop, left: randomLeft });
       setIsMoved(true);
     }
@@ -49,13 +60,13 @@ export function HomePage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white relative">
+    <div className="min-h-screen w-full relative">
+      {/* Theme gradient */}
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `
-        radial-gradient(125% 125% at 50% 90%, #ffffff 40%, #ec4899 100%)
-      `,
+          backgroundImage:
+            "radial-gradient(125% 125% at 50% 90%, var(--color-gradient-start) 40%, var(--color-gradient-end) 100%)",
           backgroundSize: "100% 100%",
         }}
       />
@@ -64,22 +75,23 @@ export function HomePage() {
         className="relative z-10 flex items-center justify-center min-h-screen p-4"
         ref={parentRef}
       >
-        <div className="text-center">
+        <div className="text-center text-[var(--color-text)]">
           <div className="mb-4 font-bold text-2xl md:text-3xl lg:text-4xl">
             {randomLine}
           </div>
-          <div className="flex justify-center gap-4 md:gap-6 relative">
+          <div className="flex justify-center gap-4 md:gap-6">
             <Button variant="cta" onClick={meetDate}>
               YES
             </Button>
 
             <div
               style={{
-                position: isMoved ? "absolute" : "relative",
+                position: isMoved ? "fixed" : "relative",
                 top: isMoved ? `${position.top}px` : "auto",
                 left: isMoved ? `${position.left}px` : "auto",
                 cursor: "pointer",
               }}
+              ref={noButtonRef}
             >
               <Button variant="cta" onClick={moveDivToRandomPosition}>
                 NO
