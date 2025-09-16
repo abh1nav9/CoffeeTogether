@@ -1,3 +1,3 @@
-# Coffee Together?
+# Coffee Day?
 
-Web app to ask your date out for a Coffee.
+Ask your date out for a Coffee.
