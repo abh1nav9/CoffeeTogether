@@ -2,7 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "../components/Button";
 
 export function HomePage() {
-  const [position, setPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const [position, setPosition] = useState<{ top: number; left: number }>({
+    top: 0,
+    left: 0,
+  });
   const [isMoved, setIsMoved] = useState<boolean>(false);
   const [randomLine, setRandomLine] = useState<string>("");
   const parentRef = useRef<HTMLDivElement | null>(null);
@@ -23,7 +26,7 @@ export function HomePage() {
   const getRandomLine = () => {
     const randomIndex = Math.floor(Math.random() * lines.length);
     return lines[randomIndex];
-    };
+  };
 
   useEffect(() => {
     setRandomLine(getRandomLine());
@@ -46,37 +49,51 @@ export function HomePage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4" ref={parentRef}>
-      <div className="text-center">
-        <div className="mb-4 font-bold text-2xl md:text-3xl lg:text-4xl">
-          {randomLine}
-        </div>
-        <div className="flex justify-center gap-4 md:gap-6 relative">
-          <Button variant="cta" onClick={meetDate}>
-            YES
-          </Button>
+    <div className="min-h-screen w-full bg-white relative">
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `
+        radial-gradient(125% 125% at 50% 90%, #ffffff 40%, #ec4899 100%)
+      `,
+          backgroundSize: "100% 100%",
+        }}
+      />
 
-          <div
-            style={{
-              position: isMoved ? "absolute" : "relative",
-              top: isMoved ? `${position.top}px` : "auto",
-              left: isMoved ? `${position.left}px` : "auto",
-              cursor: "pointer",
-            }}
-          >
-            <Button variant="cta" onClick={moveDivToRandomPosition}>
-              NO
+      <div
+        className="relative z-10 flex items-center justify-center min-h-screen p-4"
+        ref={parentRef}
+      >
+        <div className="text-center">
+          <div className="mb-4 font-bold text-2xl md:text-3xl lg:text-4xl">
+            {randomLine}
+          </div>
+          <div className="flex justify-center gap-4 md:gap-6 relative">
+            <Button variant="cta" onClick={meetDate}>
+              YES
+            </Button>
+
+            <div
+              style={{
+                position: isMoved ? "absolute" : "relative",
+                top: isMoved ? `${position.top}px` : "auto",
+                left: isMoved ? `${position.left}px` : "auto",
+                cursor: "pointer",
+              }}
+            >
+              <Button variant="cta" onClick={moveDivToRandomPosition}>
+                NO
+              </Button>
+            </div>
+          </div>
+          <div className="mt-4 text-sm font-thin">
+            Don't like the idea?{" "}
+            <Button variant="link" onClick={() => window.location.reload()}>
+              Reload it.
             </Button>
           </div>
-        </div>
-        <div className="mt-4 text-sm font-thin">
-          Don't like the idea?{' '}
-          <Button variant="link" onClick={() => window.location.reload()}>
-            Reload it.
-          </Button>
         </div>
       </div>
     </div>
   );
 }
-
