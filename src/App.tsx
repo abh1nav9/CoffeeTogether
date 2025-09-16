@@ -1,13 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
-import "./App.css";
+import { useState, useRef, useEffect } from "react";
 
 function App() {
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  const [isMoved, setIsMoved] = useState(false);
-  const [randomLine, setRandomLine] = useState(""); // State to hold the random line
-  const parentRef = useRef(null);
+  const [position, setPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const [isMoved, setIsMoved] = useState<boolean>(false);
+  const [randomLine, setRandomLine] = useState<string>("");
+  const parentRef = useRef<HTMLDivElement | null>(null);
 
-  const lines = [
+  const lines: string[] = [
     "Want to test our chemistry over coffee?",
     "Up for a date and some laughs?",
     "Coffee and charming company?",
@@ -20,13 +19,11 @@ function App() {
     "Wanna populate?",
   ];
 
-  // Function to select a random line from the array
   const getRandomLine = () => {
     const randomIndex = Math.floor(Math.random() * lines.length);
     return lines[randomIndex];
   };
 
-  // Update randomLine state on component mount
   useEffect(() => {
     setRandomLine(getRandomLine());
   }, []);
@@ -36,8 +33,8 @@ function App() {
     if (parent) {
       const parentHeight = parent.clientHeight;
       const parentWidth = parent.clientWidth;
-      const randomTop = Math.floor(Math.random() * (parentHeight - 48)); // 48 is the height of the button
-      const randomLeft = Math.floor(Math.random() * (parentWidth - 112)); // 112 is the width of the button
+      const randomTop = Math.floor(Math.random() * (parentHeight - 48));
+      const randomLeft = Math.floor(Math.random() * (parentWidth - 112));
       setPosition({ top: randomTop, left: randomLeft });
       setIsMoved(true);
     }
